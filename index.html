@@ -455,20 +455,30 @@ footer{border-top:1px solid var(--border);padding:60px 0 34px;position:relative;
     <div class="eyebrow reveal">Selected Work</div>
     <h2 class="section-title reveal">Projects worth a <em>second</em> look.</h2>
     <div class="projects-grid">
-      <div class="project-card featured reveal">
-        <div class="project-media">
-          <span class="featured-badge">Flagship Project</span>
-          <span class="glyph">AI</span>
-        </div>
-        <div class="project-body">
+      <div class="project-card reveal in-view">
+        <div class="project-body" style="padding-top:30px;">
+          <span style="display:inline-block;background:var(--gold);color:#050505;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border-radius:100px;font-weight:700;margin-bottom:10px;">Project 1</span>
           <h3>AI Ather</h3>
           <p>My own text-based AI website — a ChatGPT/Gemini-style conversational AI experience, designed and built from scratch with a smooth, modern interface.</p>
           <div class="tech-badges">
             <span>AI / ML</span><span>JavaScript</span><span>Modern UI</span><span>UX Design</span>
           </div>
-          <div class="project-links">
-            <a href="https://2013nishkarsh-boop.github.io/AI-ATHER-2/" target="_blank" rel="noopener" class="live">View AI Website Now →</a>
-            <a href="#" class="disabled">GitHub (Coming Soon)</a>
+          <div class="project-links" style="width:100%;">
+            <a href="https://2013nishkarsh-boop.github.io/AI-ATHER-2/" target="_blank" rel="noopener" class="live" style="width:100%;justify-content:center;padding:18px 0;font-size:.95rem;">View AI Website Now →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal in-view">
+        <div class="project-body" style="padding-top:30px;">
+          <span style="display:inline-block;background:var(--gold-luxury);color:#050505;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border-radius:100px;font-weight:700;margin-bottom:10px;">Project 2</span>
+          <h3>Prank Website — Clipboard Hack Effect</h3>
+          <p>A fun prank website I built for a laugh: whenever someone copies any text from the page and pastes it elsewhere, a hidden script automatically appends the message "YOUR DEVICE IS HACKED" to the copied text — a harmless little scare using nothing but JavaScript's clipboard event.</p>
+          <div class="tech-badges">
+            <span>JavaScript</span><span>Clipboard API</span><span>Fun Project</span>
+          </div>
+          <div class="project-links" style="width:100%;">
+            <a href="https://2013nishkarsh-boop.github.io/PRANK/" target="_blank" rel="noopener" class="live" style="width:100%;justify-content:center;padding:18px 0;font-size:.95rem;">View Prank Website Now →</a>
           </div>
         </div>
       </div>
@@ -700,8 +710,21 @@ const revealObserver = new IntersectionObserver((entries)=>{
       revealObserver.unobserve(entry.target);
     }
   });
-}, {threshold:0.08, rootMargin:'0px 0px -8% 0px'});
+}, {threshold:0, rootMargin:'0px 0px 0px 0px'});
 document.querySelectorAll('.reveal').forEach(el=> revealObserver.observe(el));
+// Safety net: force-reveal anything already close to the viewport on load/resize
+function forceRevealNearby(){
+  document.querySelectorAll('.reveal:not(.in-view)').forEach(el=>{
+    const rect = el.getBoundingClientRect();
+    if(rect.top < window.innerHeight * 1.15){
+      el.classList.add('in-view');
+      revealObserver.unobserve(el);
+    }
+  });
+}
+window.addEventListener('load', forceRevealNearby);
+window.addEventListener('hashchange', ()=> setTimeout(forceRevealNearby, 400));
+setTimeout(forceRevealNearby, 1200);
 document.querySelectorAll('.about-counters .counter-card').forEach(el=>{
   ScrollTrigger.create({
     trigger: el, start:'top 85%', once:true,
